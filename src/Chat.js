@@ -58,14 +58,14 @@ const Chat = (props) => {
             <TextField
                 fullWidth={true}
                 value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value) + ""}
+                onChange={(e) => setNewMessage(e.target.value)}
 
             />
             <Button
                 fullWidth={true}
                 onClick={sendMessage}
             >
-                SEND
+                SEND MESSAGE
         </Button>
         </div>
     )
