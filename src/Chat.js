@@ -10,7 +10,7 @@ import mapObjectsToArray from './mapObjectToArray';
 import moment from 'moment';
 import { fetchWithToken, logOut } from './firebaseAuth';
 
-const API_URL = 'https://isa-dm.firebaseio.com/messages/.json';
+const API_URL = 'https://isa-dm.firebaseio.com/messages/';
 const REFRESH_INTERVAL = 1000;
 
 const Chat = (props) => {
@@ -36,9 +36,12 @@ const Chat = (props) => {
         const newMessageObject = {
             text: newMessage,
             timestamp: Date.now(),
+            uuid: localStorage.getItem('localId'),
+            email: localStorage.getItem('email'),
         }
+
         return fetchWithToken(
-            API_URL,
+            API_URL + '.json',
             {
                 method: 'POST',
                 body: JSON.stringify(newMessageObject)
@@ -53,7 +56,7 @@ const Chat = (props) => {
     const getMessages = () => {
         setError(false)
 
-        return fetchWithToken(API_URL)
+        return fetchWithToken(API_URL + '.json')
             .then((r) => r.json())
             .then((messagesObject) => {
                 const messagesArray = mapObjectsToArray(messagesObject)
@@ -96,7 +99,8 @@ const Chat = (props) => {
                     <List>
                         {
                             messages && messages.map((message) => {
-                                return (<ListItem key={message.key}>
+                                return (
+                                <ListItem key={message.key}>
                                     <ListItemText primary={message.text}
                                         secondary={
                                             <>
@@ -131,6 +135,8 @@ const Chat = (props) => {
                         onChange={(e) => setNewMessage(e.target.value)}
 
                     />
+                    <br />
+                    <br />
                     <Button
                         fullWidth={true}
                         onClick={sendMessage}
@@ -138,13 +144,13 @@ const Chat = (props) => {
                         color={'primary'}
                     >
                         SEND MESSAGE
-        </Button>
+                    </Button>
                     <Button
                         fullWidth={true}
                         onClick={logOut}
                     >
                         LOG OUT
-          </Button>
+                     </Button>
                 </div>
     )
 }
